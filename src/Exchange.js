@@ -82,8 +82,6 @@ function Exchange() {
       headers: myHeaders,
     };
 
-    let response = "";
-
     try {
       const res = await fetch(url, requestOptions);
       const data = await res.json();
@@ -98,7 +96,7 @@ function Exchange() {
 
   useEffect(() => {
     fetchCurrentValue(APIurl);
-  }, []);
+  }, [APIurl]);
 
   return (
     <div className="main-container">
