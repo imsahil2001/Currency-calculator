@@ -1,0 +1,54 @@
+.amountInput{
+   margin-top: 4rem;
+   padding-left: .5rem;
+   height: 2.5rem;
+   font-size:1.4rem;
+   border-radius: 5px;
+   border: 1px solid rgb(212, 212, 212);
+   background-color:rgb(28, 28, 28);
+   outline: none;
+   color: rgb(225, 225, 225);
+}
+
+.result-cotainer h1{
+   font-size: 2.2rem;
+   color: rgb(200, 200, 200);
+   /* background-color: green; */
+   margin-top: 1rem;
+   text-align: left;
+   padding-left: 1.5rem;
+   font-weight: 600;
+}
+
+
+body{
+   background-color: rgb(35, 35, 35);
+}
+
+.main-container{
+   max-height: 50%;
+}
+
+.header h2{
+   color: rgb(242, 242, 242);
+   /* float: left; */
+   margin-top: 1rem;
+   font-size: 1.75rem;
+   text-align: left;
+   padding: .2rem .2rem .2rem 1.2rem;
+   /* background-color: green; */
+   width: 100%;
+   margin-bottom: .5rem;
+}
+
+.header p{
+   color: rgb(180, 180, 180);
+   /* float: left; */
+   /* padding-left: 1.2rem; */
+   font-size: 1.2rem;
+   text-align: left;
+   padding: .2rem .2rem .2rem 1.2rem;
+   /* background-color: green; */
+   margin-top: .5rem;
+   width: 100%;
+}
