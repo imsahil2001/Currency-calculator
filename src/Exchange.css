@@ -41,7 +41,7 @@ body{
    margin-bottom: .5rem;
 }
 
-.header p{
+.priceValue{
    color: rgb(180, 180, 180);
    /* float: left; */
    /* padding-left: 1.2rem; */
@@ -50,5 +50,18 @@ body{
    padding: .2rem .2rem .2rem 1.2rem;
    /* background-color: green; */
    margin-top: .5rem;
-   width: 100%;
+   width: 100%;   
+}
+
+.serviceDown{
+   color: rgb(191, 66, 66) !important;
+   font-size:1.1rem;
+   /* background: green; */
+   padding:0rem 0rem 0rem 1.1rem;
+   text-align:left;
+}
+
+.serviceDownImg{
+   width: 8%;
+   padding-left: .5rem;
 }

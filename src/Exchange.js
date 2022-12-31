@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import "./Exchange.css";
 
 function Exchange() {
-  // let APIurl =
-  //   "https://api.apilayer.com/exchangerates_data/convert?to=INR&from=USD&amount=1";
+  let APIurl =
+    "https://api.apilayer.com/exchangerates_data/convert?to=INR&from=USD&amount=1";
 
-  let APIurl = "https://reqres.in/api/users";
+  // let APIurl = "https://reqres.in/api/users";
 
   const [amount, setAmount] = useState("");
   const [result, setResult] = useState(0);
   const [rate, setRate] = useState(0);
+  const [serviceDown, setServiceDown] = useState(1);
 
   const calculateAndShow = (amount, rate) => {
     console.log(typeof (amount * rate));
@@ -84,10 +85,14 @@ function Exchange() {
 
     try {
       const res = await fetch(url, requestOptions);
-      const data = await res.json();
-      setRate(data.info.rate.toFixed(2));
+      if (res.ok) {
+        const data = await res.json();
+        setRate(data.info.rate.toFixed(2));
+        setServiceDown(0);
+      }
     } catch (error) {
       setRate(82.82);
+      setServiceDown(1);
       console.log(error);
     }
 
@@ -101,8 +106,19 @@ function Exchange() {
   return (
     <div className="main-container">
       <div className="header">
-        <h2>Currency Rate</h2>
-        <p> $1 - &#8377; {rate} INR</p>
+        <h2>
+          Currency Rate
+          {serviceDown === 1 ? (
+            <img
+              className="serviceDownImg"
+              src="/images/down arrow 2.png"
+              alt="service Down arrow"
+            />
+          ) : (
+            ""
+          )}
+        </h2>
+        <p className="priceValue">$1 - &#8377;{rate}</p>
       </div>
 
       <div className="amountContainer">
