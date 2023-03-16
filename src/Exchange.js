@@ -99,6 +99,7 @@ function Exchange() {
         const data = await res.json();
         console.log(data);
         setRate(data.new_amount);
+        localStorage.setItem("amount", JSON.stringify(data.new_amount));
         setServiceDown(0);
       }
     } catch (error) {
@@ -111,7 +112,13 @@ function Exchange() {
   };
 
   useEffect(() => {
-    fetchCurrentValue(APIurl);
+    console.log(localStorage.getItem("amount"));
+    if (localStorage.getItem("amount") == null) {
+      fetchCurrentValue(APIurl);
+    } else {
+      setServiceDown(0);
+      setRate(JSON.parse(localStorage.getItem("amount")));
+    }
   }, [APIurl]);
 
   return (
