@@ -3,7 +3,7 @@ import "./Exchange.css";
 
 function Exchange() {
   let APIurl =
-    "https://api.apilayer.com/exchangerates_data/convert?to=INR&from=USD&amount=1";
+    "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=USD&want=INR&amount=1";
 
   // let APIurl = "https://reqres.in/api/users";
 
@@ -75,7 +75,17 @@ function Exchange() {
 
   const fetchCurrentValue = async (url) => {
     var myHeaders = new Headers();
-    myHeaders.append("apikey", "KzbQK4nzsiwaMv4SamcG2WGRYIsFIUud");
+    // myHeaders.append("apikey", "KzbQK4nzsiwaMv4SamcG2WGRYIsFIUud");
+
+    myHeaders.append(
+      "X-RapidAPI-Key",
+      "66d517a5b7msh47407221adc4922p1dc441jsn613e685c5fc1"
+    );
+    myHeaders.append(
+      "X-RapidAPI-Host",
+      "currency-converter-by-api-ninjas.p.rapidapi.com"
+    );
+    myHeaders.append("Access-Control-Allow-Origin", "*");
 
     var requestOptions = {
       method: "GET",
@@ -87,7 +97,8 @@ function Exchange() {
       const res = await fetch(url, requestOptions);
       if (res.ok) {
         const data = await res.json();
-        setRate(data.info.rate.toFixed(2));
+        console.log(data);
+        setRate(data.new_amount);
         setServiceDown(0);
       }
     } catch (error) {
