@@ -1,67 +1,167 @@
-.amountInput{
-   margin-top: 4rem;
-   padding-left: .5rem;
-   height: 2.5rem;
-   font-size:1.4rem;
-   border-radius: 5px;
-   border: 1px solid rgb(212, 212, 212);
-   background-color:rgb(28, 28, 28);
-   outline: none;
-   color: rgb(225, 225, 225);
+@import url("https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.result-cotainer h1{
-   font-size: 2.2rem;
-   color: rgb(200, 200, 200);
-   /* background-color: green; */
-   margin-top: 1rem;
-   text-align: left;
-   padding-left: 1.5rem;
-   font-weight: 600;
+.amountContainer {
+  margin-top: 2rem;
+  position: relative;
 }
 
-
-body{
-   background-color: rgb(35, 35, 35);
+.amountInput {
+  /* margin-top: 4rem; */
+  padding-left: 0.5rem;
+  height: 2.5rem;
+  font-size: 1.4rem;
+  border-radius: 5px;
+  border: 1px solid rgb(212, 212, 212);
+  background-color: rgb(28, 28, 28);
+  outline: none;
+  color: rgb(225, 225, 225);
 }
 
-.main-container{
-   max-height: 50%;
+.resetInputBtn {
+  width: 2.2rem;
+  position: absolute;
+  border: none;
+  display: block;
+  width: 2.3rem;
+  height: 2.4rem;
+  line-height: 2px;
+  font-size: 1.9rem;
+  border-radius: 0px 4px 4px 0px;
+  /* top-left top-right bottom-right bottom-left */
+  top: 0;
+  bottom: 0;
+  right: 6.2%;
+  margin: auto;
+  background: #ddd;
+  padding: 0;
+  outline: none;
+  cursor: pointer;
+  transition: 90ms;
 }
 
-.header h2{
-   color: rgb(242, 242, 242);
-   /* float: left; */
-   margin-top: 1rem;
-   font-size: 1.75rem;
-   text-align: left;
-   padding: .2rem .2rem .2rem 1.2rem;
-   /* background-color: green; */
-   width: 100%;
-   margin-bottom: .5rem;
+.result-container h1 {
+  font-size: 2.2rem;
+  color: rgb(200, 200, 200);
+  /* background-color: green; */
+  width: 22rem;
+  display: block;
+  margin: auto;
+  margin-top: 1rem;
+  text-align: left;
+  word-wrap: break-word;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  font-weight: 600;
 }
 
-.priceValue{
-   color: rgb(180, 180, 180);
-   /* float: left; */
-   /* padding-left: 1.2rem; */
-   font-size: 1.2rem;
-   text-align: left;
-   padding: .2rem .2rem .2rem 1.2rem;
-   /* background-color: green; */
-   margin-top: .5rem;
-   width: 100%;   
+body {
+  background-color: rgb(35, 35, 35);
 }
 
-.serviceDown{
-   color: rgb(191, 66, 66) !important;
-   font-size:1.1rem;
-   /* background: green; */
-   padding:0rem 0rem 0rem 1.1rem;
-   text-align:left;
+.main-container {
+  height: 100vh;
+  width: 100vw;
 }
 
-.serviceDownImg{
-   width: 8%;
-   padding-left: .5rem;
+.header {
+  text-align: left;
+}
+
+.header h2 {
+  color: rgb(242, 242, 242);
+  display: inline-block;
+  margin-top: 1rem;
+  font-size: 1.75rem;
+  padding: 0.2rem 0.2rem 0.2rem 1.2rem;
+  /* background-color: green; */
+  margin-bottom: 0.5rem;
+  font-family: "Fira Sans Extra Condensed", sans-serif;
+}
+.header span {
+  display: inline-block;
+  background: rgb(110, 110, 110);
+  margin-left: 0.6rem;
+  color: white;
+}
+
+.priceValue {
+  color: rgb(180, 180, 180);
+  /* float: left; */
+  /* padding-left: 1.2rem; */
+  font-size: 1.2rem;
+  text-align: left;
+  padding: 0.2rem 0.2rem 0.2rem 1.2rem;
+  /* background-color: green; */
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+.serviceDown {
+  color: rgb(191, 66, 66) !important;
+  font-size: 1.1rem;
+  /* background: green; */
+  padding: 0rem 0rem 0rem 1.1rem;
+  text-align: left;
+}
+
+.serviceDownImg {
+  width: 8%;
+  padding-left: 0.5rem;
+}
+
+.calculator {
+  margin-top: 4rem;
+  /* background: green; */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin: 0 auto;
+  width: 15rem;
+  height: 14rem;
+}
+
+.btn {
+  height: 50px;
+  width: 50px;
+  margin: 10px;
+  font-size: 1.35rem;
+  border-radius: 100px;
+  outline: none;
+  border: none;
+}
+
+.btn:active {
+  background: #666666;
+}
+
+/* reload btn */
+
+.reloadBtn-container {
+  border-bottom: 3px solid rgb(147, 147, 147);
+  transition: 90ms transform;
+}
+
+.reloadBtn-container:active {
+  border-bottom: 0px;
+  transform: translateY(5%);
+}
+.reloadBtn:active {
+  transform: translateY(10%);
+  transition: 100ms;
+  /* animation: reload 1s ease-out forwards; */
+}
+
+@keyframes reload {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
 }

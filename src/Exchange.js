@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+import { useRef } from "react";
+import { useState } from "react";
 import "./Exchange.css";
 
 function Exchange() {
   let APIurl =
     "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=USD&want=INR&amount=1";
 
-  // let APIurl = "https://reqres.in/api/users";
-
   const [amount, setAmount] = useState("");
+  const box = useRef();
   const [result, setResult] = useState(0);
   const [rate, setRate] = useState(0);
   const [serviceDown, setServiceDown] = useState(1);
 
   const calculateAndShow = (amount, rate) => {
-    console.log(typeof (amount * rate));
+    // console.log(typeof (amount * rate));
     let netRate = (amount * rate).toFixed(2) + "";
     if (netRate.length >= 4) {
       let val = transform(netRate);
@@ -21,14 +22,14 @@ function Exchange() {
     } else setResult(netRate);
   };
 
-  const changeAmount = (e) => {
-    setAmount(e.target.value);
+  const changeAmount = (val) => {
+    // setAmount(e.target.value);
 
-    let currentAmount = e.target.value;
+    let currentAmount = val;
     let commasRemovedVal = currentAmount.replace(/,/gi, "");
     let sytaxedVal = commasRemovedVal.split(/(?=(?:\d{3})+$)/).join(",");
 
-    console.log(sytaxedVal);
+    console.log("syntaxedval - " + sytaxedVal);
     setAmount(sytaxedVal);
 
     calculateAndShow(commasRemovedVal, rate);
@@ -66,11 +67,97 @@ function Exchange() {
   const reversefcn = (val) => {
     let reverseVal = "";
     val += "";
-    console.log(typeof val);
+    // console.log(typeof val);
     for (let i = val.length - 1; i >= 0; i--) {
       reverseVal += val[i];
     }
     return reverseVal;
+  };
+
+  const pressedBtn = (val) => {
+    console.log(`${val} is pressed`);
+    val = amount + val;
+    changeAmount(val);
+    console.log(`val = ${val} && amount = ${amount}`);
+    vibrate({ duration: 100, interval: 50, count: 1 });
+  };
+
+  const vibrate = (options = { duration: 100, interval: 100, count: 1 }) => {
+    // console.log("vibrate");
+    if (arguments.length !== 1) {
+      // throw new Error("Expected exactly one argument.");
+    }
+
+    if (Object.prototype.toString.call(options) !== "[object Object]") {
+      // throw new TypeError("Expected first argument to be an object.");
+    }
+
+    if (
+      typeof options.duration !== "number" ||
+      !Number.isInteger(options.duration)
+    ) {
+      // throw new TypeError("Expected options.duration to be an integer.");
+    }
+
+    if (
+      typeof options.interval !== "number" ||
+      !Number.isInteger(options.interval)
+    ) {
+      // throw new TypeError("Expected options.interval to be an integer.");
+    }
+
+    if (typeof options.count !== "number" || !Number.isInteger(options.count)) {
+      // throw new TypeError("Expected options.count to be an integer.");
+    }
+
+    if (options.duration < 0) {
+      // throw new RangeError(
+      //   "Expected options.duration to be greater or equal to zero."
+      // );
+    }
+
+    if (options.interval < 0) {
+      // throw new RangeError(
+      //   "Expected options.interval to be greater or equal to zero."
+      // );
+    }
+
+    if (options.count < 0) {
+      // throw new RangeError(
+      //   "Expected options.count to be greater or equal to zero."
+      // );
+    }
+
+    if (!window) {
+      return;
+    }
+
+    if (!window.navigator) {
+      return;
+    }
+
+    if (!window.navigator.vibrate) {
+      return;
+    }
+
+    const pattern = [];
+
+    for (let index = 0; index < options.count; index++) {
+      pattern.push(options.duration);
+      pattern.push(options.interval);
+    }
+
+    window.navigator.vibrate(pattern);
+  };
+
+  const resetValue = () => {
+    const val = "";
+    setAmount(val);
+    setResult(0);
+  };
+
+  const reloadAPI = () => {
+    fetchCurrentValue(APIurl);
   };
 
   const fetchCurrentValue = async (url) => {
@@ -107,19 +194,18 @@ function Exchange() {
       setServiceDown(1);
       console.log(error);
     }
-
-    //  console.log(response.info.rate);
   };
 
   useEffect(() => {
-    console.log(localStorage.getItem("amount"));
     if (localStorage.getItem("amount") == null) {
       fetchCurrentValue(APIurl);
     } else {
       setServiceDown(0);
       setRate(JSON.parse(localStorage.getItem("amount")));
     }
-  }, [APIurl]);
+    // console.log(amount);
+    setAmount(amount);
+  }, [amount]);
 
   return (
     <div className="main-container">
@@ -136,6 +222,22 @@ function Exchange() {
             ""
           )}
         </h2>
+        <span className="reloadBtn-container" onClick={() => reloadAPI()}>
+          <svg
+            className="reloadBtn"
+            xmlns="http://www.w3.org/2000/svg"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            fill="transparent"
+          >
+            <path d="M0 0h24v24H0z" fill="" />
+            <path
+              d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+              fill="white"
+            />
+          </svg>
+        </span>
         <p className="priceValue">$1 - &#8377;{rate}</p>
       </div>
 
@@ -144,12 +246,66 @@ function Exchange() {
           className="amountInput"
           type="text"
           value={amount}
-          onChange={changeAmount}
+          readOnly
+          ref={box}
         />
+        <button
+          className="resetInputBtn"
+          onClick={() => {
+            vibrate({ duration: 100, interval: 50, count: 1 });
+            resetValue();
+          }}
+          type="reset"
+        >
+          &times;
+        </button>
       </div>
 
-      <div className="result-cotainer">
+      <div className="result-container">
         <h1>&#8377;{result}</h1>
+      </div>
+
+      <div className="calculator">
+        <button
+          className="btn"
+          onClick={() => {
+            pressedBtn("1");
+          }}
+        >
+          1
+        </button>
+        <button
+          className="btn"
+          onClick={() => {
+            pressedBtn("2");
+          }}
+        >
+          2
+        </button>
+        <button className="btn" onClick={() => pressedBtn("3")}>
+          3
+        </button>
+        <button className="btn" onClick={() => pressedBtn("4")}>
+          4
+        </button>
+        <button className="btn" onClick={() => pressedBtn("5")}>
+          5
+        </button>
+        <button className="btn" onClick={() => pressedBtn("6")}>
+          6
+        </button>
+        <button className="btn" onClick={() => pressedBtn("7")}>
+          7
+        </button>
+        <button className="btn" onClick={() => pressedBtn("8")}>
+          8
+        </button>
+        <button className="btn" onClick={() => pressedBtn("9")}>
+          9
+        </button>
+        <button className="btn" onClick={() => pressedBtn("0")}>
+          0
+        </button>
       </div>
     </div>
   );
