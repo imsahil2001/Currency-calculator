@@ -1,17 +1,17 @@
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 import "./Exchange.css";
 
 function Exchange() {
-  let APIurl =
-    "https://currency-converter-by-api-ninjas.p.rapidapi.com/v1/convertcurrency?have=USD&want=INR&amount=1";
-
   const [amount, setAmount] = useState("");
   const box = useRef();
   const [result, setResult] = useState(0);
   const [rate, setRate] = useState(0);
   const [serviceDown, setServiceDown] = useState(1);
+  const [currentDate, setCurrentDate] = useState("");
+
+  let APIurl = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${currentDate}/currencies/usd.json`;
 
   const calculateAndShow = (amount, rate) => {
     // console.log(typeof (amount * rate));
@@ -164,15 +164,15 @@ function Exchange() {
     var myHeaders = new Headers();
     // myHeaders.append("apikey", "KzbQK4nzsiwaMv4SamcG2WGRYIsFIUud");
 
-    myHeaders.append(
-      "X-RapidAPI-Key",
-      "66d517a5b7msh47407221adc4922p1dc441jsn613e685c5fc1"
-    );
-    myHeaders.append(
-      "X-RapidAPI-Host",
-      "currency-converter-by-api-ninjas.p.rapidapi.com"
-    );
-    myHeaders.append("Access-Control-Allow-Origin", "*");
+    // myHeaders.append(
+    //   "X-RapidAPI-Key",
+    //   "66d517a5b7msh47407221adc4922p1dc441jsn613e685c5fc1"
+    // );
+    // myHeaders.append(
+    //   "X-RapidAPI-Host",
+    //   "currency-converter-by-api-ninjas.p.rapidapi.com"
+    // );
+    // myHeaders.append("Access-Control-Allow-Origin", "*");
 
     var requestOptions = {
       method: "GET",
@@ -184,28 +184,53 @@ function Exchange() {
       const res = await fetch(url, requestOptions);
       if (res.ok) {
         const data = await res.json();
-        console.log(data);
-        setRate(data.new_amount);
-        localStorage.setItem("amount", JSON.stringify(data.new_amount));
+        console.log("data ====== ", data.usd.inr);
+        setRate(data.usd.inr);
+
+        localStorage.setItem("amount", JSON.stringify(rate));
+        console.log("local storage updated");
+
         setServiceDown(0);
       }
     } catch (error) {
+      console.log("Exception occureed while calling rest :: ", error);
       setRate(82.82);
       setServiceDown(1);
-      console.log(error);
     }
   };
 
+  const dateSetting = () => {
+    const now = new Date();
+    let date = now.getDate();
+    let month = now.getMonth() + 1;
+    let year = now.getFullYear();
+
+    const previousDate = new Date(year, month - 1, date - 1);
+    let formattedDate =
+      previousDate.getFullYear() +
+      "-" +
+      (previousDate.getMonth() + 1) +
+      "-" +
+      previousDate.getDate();
+
+    console.log("Previous date == ", formattedDate);
+    setCurrentDate(formattedDate);
+    console.log("Previous date has been set successfully");
+
+    APIurl = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${formattedDate}/currencies/usd.json`;
+  };
+
   useEffect(() => {
+    dateSetting();
+    console.log(APIurl);
     if (localStorage.getItem("amount") == null) {
       fetchCurrentValue(APIurl);
     } else {
       setServiceDown(0);
       setRate(JSON.parse(localStorage.getItem("amount")));
     }
-    // console.log(amount);
-    setAmount(amount);
-  }, [amount]);
+    // setAmount(amount);
+  }, []);
 
   return (
     <div className="main-container">
@@ -222,7 +247,13 @@ function Exchange() {
             ""
           )}
         </h2>
-        <span className="reloadBtn-container" onClick={() => reloadAPI()}>
+        <span
+          className="reloadBtn-container"
+          onClick={() => {
+            reloadAPI();
+            resetValue();
+          }}
+        >
           <svg
             className="reloadBtn"
             xmlns="http://www.w3.org/2000/svg"
