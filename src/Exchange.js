@@ -11,7 +11,7 @@ function Exchange() {
   const [serviceDown, setServiceDown] = useState(1);
   const [currentDate, setCurrentDate] = useState("");
 
-  let APIurl = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${currentDate}/currencies/usd.json`;
+  let APIurl = `https://currency-exchange-4afx.onrender.com/baeldung/exchange/inr?rate=1`;
 
   const calculateAndShow = (amount, rate) => {
     // console.log(typeof (amount * rate));
@@ -175,7 +175,7 @@ function Exchange() {
     // myHeaders.append("Access-Control-Allow-Origin", "*");
 
     var requestOptions = {
-      method: "GET",
+      method: "POST",
       redirect: "follow",
       headers: myHeaders,
     };
@@ -183,14 +183,25 @@ function Exchange() {
     try {
       const res = await fetch(url, requestOptions);
       if (res.ok) {
+        // console.log(res.json());
         const data = await res.json();
-        console.log("data ====== ", data.usd.inr);
-        setRate(data.usd.inr);
+        console.log("data ====== ", data);
+        // setRate(data.usd.inr);
 
-        localStorage.setItem("amount", JSON.stringify(rate));
-        console.log("local storage updated");
+        if (data.Status !== "OK") {
+          setRate(82.82);
+          setServiceDown(1);
+        } else if (data.Status == "OK") {
+          console.log(
+            "Got success response from api with rate as ",
+            data["Calculated Rate"]
+          );
 
-        setServiceDown(0);
+          setRate(data["Calculated Rate"]);
+          setServiceDown(0);
+          localStorage.setItem("amount", data["Calculated Rate"]);
+          console.log("local storage updated");
+        }
       }
     } catch (error) {
       console.log("Exception occureed while calling rest :: ", error);
@@ -217,12 +228,12 @@ function Exchange() {
     setCurrentDate(formattedDate);
     console.log("Previous date has been set successfully");
 
-    APIurl = `https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${formattedDate}/currencies/usd.json`;
+    APIurl = `http://localhost:7886/baeldung/exchange/inr?rate=500`;
   };
 
   useEffect(() => {
-    dateSetting();
-    console.log(APIurl);
+    // dateSetting();
+    // console.log(APIurl);
     if (localStorage.getItem("amount") == null) {
       fetchCurrentValue(APIurl);
     } else {
